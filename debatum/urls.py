@@ -5,12 +5,13 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+	url(r'^admin/', include(admin.site.urls)),
 	# ex: /polls/
-	url(r'^polls/$', views.index, name='index'),
+	url(r'^polls/$', views.index),
 	# ex: /polls/5/
-    url(r'^polls/(?P<poll_id>\d+)/$', views.detail, name='detail'),
+    url(r'^polls/(?P<PollID>\d+)/$', views.detail),
 	# ex: /polls/5/results/
-	url(r'^polls/(?P<poll_id>\d+)/results/$', 'polls.views.results'),
+	url(r'^polls/(?P<pollID>\d+)/results/$', views.results),
 	# ex: /polls/5/vote/
-	url(r'^polls/(?P<poll_id>\d+)/vote/$', 'polls.views.vote'),
+	url(r'^polls/(?P<pollID>\d+)/vote/$', views.vote),
 )
