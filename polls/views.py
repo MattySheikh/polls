@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.utils import timezone
 
 from polls.models import Poll, Choice
 
@@ -9,13 +10,22 @@ class IndexView(generic.ListView):
 	template_name = 'polls/index.html'
 	context_object_name = 'latestPollList'
 	def get_queryset(self):
-		"""Return the last five published polls"""
-		return Poll.objects.order_by('-pub_date')[:5]
+		"""
+		Return the last five published polls except for
+		those set to be published in the future
+		"""
+		return Poll.objects.filter(
+			pub_date__lte = timezone.now()
+			).order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
 	model = Poll
 	template_name = 'polls/detail.html'
-
+	def get_queryset(self):
+		"""
+		Return only current or past polls, no future
+		"""
+		return Poll.objects.filter(pub_date__lte = timezone.now())
 class ResultsView(generic.DetailView):
 	model = Poll
 	template_name = 'polls/results.html'
