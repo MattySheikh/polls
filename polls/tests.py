@@ -9,8 +9,24 @@ class PollMethodTests(TestCase):
 
 	def testWasPublishedRecentlyWithFuturePoll(self):
 		"""
-		was_published_recently() should return False for polls whose
+		wasPublishedRecently() should return False for polls whose
 		pub_date is in the future
 		"""
 		futurePoll = Poll(pub_date=timezone.now() + datetime.timedelta(days=30))
-		self.assertEqual(futurePoll.was_published_recently(), False)
+		self.assertEqual(futurePoll.wasPublishedRecently(), False)
+
+	def testWasPublishedRecentlyWithOldPoll(self):
+		"""
+		wasPublishedRecently() should return False for polls created more
+		than a month ago
+		"""
+		pastPoll = Poll(pub_date=timezone.now() - datetime.timedelta(days=30))
+		self.assertEqual(pastPoll.wasPublishedRecently(), False)
+
+	def testWasPublishedRecentlyWithNewPoll(self):
+		"""
+		wasPublishedRecently() should return False for polls created
+		within the last hour
+		"""
+		newPoll = Poll(pub_date=timezone.now() - datetime.timedelta(hours=1))
+		self.assertEqual(newPoll.wasPublishedRecently(), True)
