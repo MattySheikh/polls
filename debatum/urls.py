@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 from polls import views, urls
-
 from django.contrib import admin
 admin.autodiscover()
 
